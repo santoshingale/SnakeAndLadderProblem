@@ -9,23 +9,28 @@ WINNING_POSITION=100
 
 position=$START_POSITION
 
-while [ $position -lt $WINNING_POSITION ]
-do
-	die=$((RANDOM % 6 +1))
-	checkMove=$(( RANDOM % 3 ))
+function snakeAndLadderSimulator(){
 
-	case $checkMove in
-		$NO_MOVE);; 
-		$LADDER)
-			if [ $(( $WINNING_POSITION - $position )) -ge $die ]
-			then
-			position=$(( $position + $die ))
-			fi;;
-		$SNAKE)
-			position=$(( $position - $die ))
-			if [ $position -lt 0 ]
-			then
-				position=$START_POSITION
-			fi;;
-	esac
-done
+	while [ $position -lt $WINNING_POSITION ]
+	do
+		die=$((RANDOM % 6 +1))
+		checkMove=$(( RANDOM % 3 ))
+
+		case $checkMove in
+			$NO_MOVE);; 
+			$LADDER)
+				if [ $(( $WINNING_POSITION - $position )) -ge $die ]
+				then
+					position=$(( $position + $die ))
+				fi;;
+			$SNAKE)
+				position=$(( $position - $die ))
+				if [ $position -lt 0 ]
+				then
+					position=$START_POSITION
+				fi;;
+		esac
+	done
+}
+
+snakeAndLadderSimulator
