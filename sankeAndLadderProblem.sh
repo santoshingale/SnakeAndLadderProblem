@@ -7,9 +7,13 @@ LADDER=1
 SNAKE=2
 WINNING_POSITION=100
 
+declare -A gameLog
+
 position=$START_POSITION
 
 function snakeAndLadderSimulator(){
+
+	dieRoleNumber=1
 
 	while [ $position -lt $WINNING_POSITION ]
 	do
@@ -17,7 +21,7 @@ function snakeAndLadderSimulator(){
 		checkMove=$(( RANDOM % 3 ))
 
 		case $checkMove in
-			$NO_MOVE);; 
+			$NO_MOVE) ;;
 			$LADDER)
 				if [ $(( $WINNING_POSITION - $position )) -ge $die ]
 				then
@@ -30,7 +34,12 @@ function snakeAndLadderSimulator(){
 					position=$START_POSITION
 				fi;;
 		esac
+
+		gameLog[$dieRoleNumber]=$position
+		dieRoleNumber=$(( $dieRoleNumber + 1 ))
+
 	done
+	echo $dieRoleNumber
 }
 
-snakeAndLadderSimulator
+result="$(snakeAndLadderSimulator)"
