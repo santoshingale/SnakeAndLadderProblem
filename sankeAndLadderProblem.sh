@@ -7,8 +7,6 @@ LADDER=1
 SNAKE=2
 WINNING_POSITION=100
 
-position=$START_POSITION
-
 function getNextDieRole(){
 
 	position=$1
