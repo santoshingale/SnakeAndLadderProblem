@@ -7,20 +7,19 @@ LADDER=1
 SNAKE=2
 WINNING_POSITION=100
 
-declare -A gameLog
-
 position=$START_POSITION
 
-function snakeAndLadderSimulator(){
+function getNextDieRole(){
 
-	dieRoleNumber=1
+	position=$1
 
-	while [ $position -lt $WINNING_POSITION ]
-	do
+	if [ $position -lt $WINNING_POSITION ]
+	then
 		die=$((RANDOM % 6 +1))
 		checkMove=$(( RANDOM % 3 ))
 
 		case $checkMove in
+
 			$NO_MOVE) ;;
 			$LADDER)
 				if [ $(( $WINNING_POSITION - $position )) -ge $die ]
@@ -29,17 +28,44 @@ function snakeAndLadderSimulator(){
 				fi;;
 			$SNAKE)
 				position=$(( $position - $die ))
-				if [ $position -lt 0 ]
+				if [ $position -lt $START_POSITION ]
 				then
 					position=$START_POSITION
 				fi;;
 		esac
 
-		gameLog[$dieRoleNumber]=$position
-		dieRoleNumber=$(( $dieRoleNumber + 1 ))
-
-	done
-	echo $dieRoleNumber
+	fi
+	echo $position
 }
 
-result="$(snakeAndLadderSimulator)"
+function checkWinner(){
+
+	firstPlayerDieRole=0
+	secondPlayerDieRole=0
+	firstPlayerPosition=$START_POSITION
+	secondPlayerPosition=$START_POSITION
+
+	while true
+	do
+		firstPlayerPosition=$(getNextDieRole $firstPlayerPosition )
+		firstPlayerDieRole=$(( $firstPlayerDieRole + 1 ))
+
+		if [ $firstPlayerPosition -eq $WINNING_POSITION ]
+		then
+			echo -e "First player number of role Die: $firstPlayerDieRole \nSecond player number of role Die: $secondPlayerDieRole \nFirst player is winner"
+			break
+		fi
+
+		secondPlayerPosition=$(getNextDieRole $secondPlayerPosition )
+		secondPlayerDieRole=$(( $secondPlayerDieRole + 1 ))
+
+		if [ $secondPlayerPosition -eq $WINNING_POSITION ]
+		then
+			echo -e "First player number of role Die: $firstPlayerDieRole \nSecond player number of role Die: $secondPlayerDieRole \nSecond player is winner"
+			break
+		fi
+
+	done
+}
+
+checkWinner
