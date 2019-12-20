@@ -7,6 +7,8 @@ LADDER=1
 SNAKE=2
 WINNING_POSITION=100
 
+winner="null"
+
 function getNextDieRole(){
 
 	position=$1
@@ -31,39 +33,28 @@ function getNextDieRole(){
 					position=$START_POSITION
 				fi;;
 		esac
-
 	fi
-	echo $position
+
+	if [ $position -eq $WINNING_POSITION ]
+	then
+		winner=$2
+	fi
+		echo "$position"
 }
 
 function checkWinner(){
 
-	firstPlayerDieRole=0
-	secondPlayerDieRole=0
+	numberOfDieRole=0
 	firstPlayerPosition=$START_POSITION
 	secondPlayerPosition=$START_POSITION
 
-	while true
+	while [ $firstPlayerPosition -lt $WINNING_POSITION ] && [ $secondPlayerPosition -lt $WINNING_POSITION ]
 	do
-		firstPlayerPosition=$(getNextDieRole $firstPlayerPosition )
-		firstPlayerDieRole=$(( $firstPlayerDieRole + 1 ))
-
-		if [ $firstPlayerPosition -eq $WINNING_POSITION ]
-		then
-			echo -e "First player number of role Die: $firstPlayerDieRole \nSecond player number of role Die: $secondPlayerDieRole \nFirst player is winner"
-			break
-		fi
-
-		secondPlayerPosition=$(getNextDieRole $secondPlayerPosition )
-		secondPlayerDieRole=$(( $secondPlayerDieRole + 1 ))
-
-		if [ $secondPlayerPosition -eq $WINNING_POSITION ]
-		then
-			echo -e "First player number of role Die: $firstPlayerDieRole \nSecond player number of role Die: $secondPlayerDieRole \nSecond player is winner"
-			break
-		fi
-
+		firstPlayerPosition=$(getNextDieRole $firstPlayerPosition "First Player")
+		secondPlayerPosition=$(getNextDieRole $secondPlayerPosition "Second Player")
+		numberOfDieRole=$(( numberOfDieRole + 1 ))
 	done
+	echo -e "$winner is winner	\n	number of role Die: $numberOfDieRole"
 }
 
 checkWinner
